@@ -11,6 +11,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.packtpub.libgdx.canyonbunny.util.CameraHelper;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
+
 
 public class WorldController extends InputAdapter {
     private static final String TAG = WorldController.class.getName();
@@ -34,22 +37,20 @@ public class WorldController extends InputAdapter {
         // Create new array for 5 sprites
         testSprites = new Sprite[5];
 
-        // Create empty POT-sized Pixmap with 8 bit RGBA pixel data
-        int width = 32;
-        int height = 32;
-        Pixmap pixmap = createProceduralPixmap(width, height);
+        // Create a list of texture regions
+        Array<TextureRegion> regions = new Array<TextureRegion>();
+        regions.add(Assets.instance.bunny.head);
+        regions.add(Assets.instance.feather.feather);
+        regions.add(Assets.instance.goldCoin.goldCoin);
 
-        // Create a new texture from pixmap data
-        Texture texture = new Texture(pixmap);
-
-        // Create new sprites using the just created texture
+        // Create new sprites using a random texture region
         for (int i = 0; i < testSprites.length; i++) {
-            Sprite spr = new Sprite(texture);
+            Sprite spr = new Sprite(regions.random());
 
             // Define sprite size to be 1m x 1m in game world
             spr.setSize(1, 1);
 
-            // Set origin to sprite's center
+            // Set origin to sprites center
             spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
 
             // Calculate random position for sprite
@@ -60,6 +61,7 @@ public class WorldController extends InputAdapter {
             // Put new sprite into array
             testSprites[i] = spr;
         }
+
         // Set first sprite as selected one
         selectedSprite = 0;
     }
