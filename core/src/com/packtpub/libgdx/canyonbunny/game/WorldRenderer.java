@@ -25,18 +25,17 @@ public class WorldRenderer implements Disposable {
         camera.update();
     }
 
-    private void renderTestObjects() {
+
+    private void renderWorld (SpriteBatch batch) {
         worldController.cameraHelper.applyTo(camera);
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        for (Sprite sprite : worldController.testSprites) {
-            sprite.draw(batch);
-        }
+        worldController.level.render(batch);
         batch.end();
     }
 
     public void render() {
-        renderTestObjects();
+        renderWorld(batch);
     }
 
     public void resize(int width, int height) {
