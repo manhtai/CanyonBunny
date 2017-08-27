@@ -24,7 +24,7 @@ public class Level {
 
         private int color;
 
-        private BLOCK_TYPE(int r, int g, int b) {
+        BLOCK_TYPE(int r, int g, int b) {
             color = r << 24 | g << 16 | b << 8 | 0xff;
         }
 

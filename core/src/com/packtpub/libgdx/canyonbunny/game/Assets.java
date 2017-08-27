@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Disposable;
@@ -27,13 +28,13 @@ public class Assets implements Disposable, AssetErrorListener {
     public AssetLevelDecoration levelDecoration;
 
     // singleton: prevent instantiation from other classes
-    private Assets () {
+    private Assets() {
     }
 
     public class AssetBunny {
         public final AtlasRegion head;
 
-        public AssetBunny (TextureAtlas atlas) {
+        public AssetBunny(TextureAtlas atlas) {
             head = atlas.findRegion("bunny_head");
         }
     }
@@ -42,7 +43,7 @@ public class Assets implements Disposable, AssetErrorListener {
         public final AtlasRegion edge;
         public final AtlasRegion middle;
 
-        public AssetRock (TextureAtlas atlas) {
+        public AssetRock(TextureAtlas atlas) {
             edge = atlas.findRegion("rock_edge");
             middle = atlas.findRegion("rock_middle");
         }
@@ -51,7 +52,7 @@ public class Assets implements Disposable, AssetErrorListener {
     public class AssetGoldCoin {
         public final AtlasRegion goldCoin;
 
-        public AssetGoldCoin (TextureAtlas atlas) {
+        public AssetGoldCoin(TextureAtlas atlas) {
             goldCoin = atlas.findRegion("item_gold_coin");
         }
     }
@@ -59,7 +60,7 @@ public class Assets implements Disposable, AssetErrorListener {
     public class AssetFeather {
         public final AtlasRegion feather;
 
-        public AssetFeather (TextureAtlas atlas) {
+        public AssetFeather(TextureAtlas atlas) {
             feather = atlas.findRegion("item_feather");
         }
     }
@@ -72,7 +73,7 @@ public class Assets implements Disposable, AssetErrorListener {
         public final AtlasRegion mountainRight;
         public final AtlasRegion waterOverlay;
 
-        public AssetLevelDecoration (TextureAtlas atlas) {
+        public AssetLevelDecoration(TextureAtlas atlas) {
             cloud01 = atlas.findRegion("cloud01");
             cloud02 = atlas.findRegion("cloud02");
             cloud03 = atlas.findRegion("cloud03");
@@ -82,7 +83,35 @@ public class Assets implements Disposable, AssetErrorListener {
         }
     }
 
-    public void init (AssetManager assetManager) {
+    public AssetFonts fonts;
+
+    public class AssetFonts {
+        public final BitmapFont defaultSmall;
+        public final BitmapFont defaultNormal;
+        public final BitmapFont defaultBig;
+
+        public AssetFonts() {
+            // create three fonts using Libgdx's 15px bitmap font
+            defaultSmall = new BitmapFont(Gdx.files.internal("assets/images/arial-15.fnt"), true);
+            defaultNormal = new BitmapFont(Gdx.files.internal("assets/images/arial-15.fnt"), true);
+            defaultBig = new BitmapFont(Gdx.files.internal("assets/images/arial-15.fnt"), true);
+
+            Gdx.app.debug(TAG, "Fonts loaded");
+
+            // set font sizes
+            defaultSmall.getData().setScale(0.75f, 1.0f);
+            defaultNormal.getData().setScale(1.0f, 1.0f);
+            defaultBig.getData().setScale(2.0f, 1.0f);
+
+            // enable linear texture filtering for smooth fonts
+            defaultSmall.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+            defaultNormal.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+            defaultBig.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        }
+    }
+
+
+    public void init(AssetManager assetManager) {
         this.assetManager = assetManager;
         // set asset manager error handler
         assetManager.setErrorListener(this);
@@ -111,17 +140,23 @@ public class Assets implements Disposable, AssetErrorListener {
         goldCoin = new AssetGoldCoin(atlas);
         feather = new AssetFeather(atlas);
         levelDecoration = new AssetLevelDecoration(atlas);
+
+        // fonts
+        fonts = new AssetFonts();
     }
 
     @Override
-    public void dispose () {
+    public void dispose() {
         assetManager.dispose();
+        fonts.defaultBig.dispose();
+        fonts.defaultNormal.dispose();
+        fonts.defaultSmall.dispose();
     }
 
 
     @Override
     public void error(AssetDescriptor asset, Throwable throwable) {
-        Gdx.app.error(TAG, "Couldn't load asset '" + asset.fileName + "'", (Exception)throwable);
+        Gdx.app.error(TAG, "Couldn't load asset '" + asset.fileName + "'", throwable);
 
     }
 
