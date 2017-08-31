@@ -99,9 +99,9 @@ public class Assets implements Disposable, AssetErrorListener {
             Gdx.app.debug(TAG, "Fonts loaded");
 
             // set font sizes
-            defaultSmall.getData().setScale(0.75f, 1.0f);
+            defaultSmall.getData().setScale(0.75f, 0.75f);
             defaultNormal.getData().setScale(1.0f, 1.0f);
-            defaultBig.getData().setScale(2.0f, 1.0f);
+            defaultBig.getData().setScale(2.0f, 2.0f);
 
             // enable linear texture filtering for smooth fonts
             defaultSmall.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);

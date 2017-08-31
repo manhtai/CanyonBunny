@@ -87,6 +87,7 @@ public class BunnyHead extends AbstractGameObject {
             case GROUNDED:
                 jumpState = JUMP_STATE.FALLING;
                 break;
+
             case JUMP_RISING:
                 // Keep track of jump time
                 timeJumping += deltaTime;
@@ -96,8 +97,10 @@ public class BunnyHead extends AbstractGameObject {
                     velocity.y = terminalVelocity.y;
                 }
                 break;
+
             case FALLING:
                 break;
+
             case JUMP_FALLING:
                 // Add delta times to track jump time
                 timeJumping += deltaTime;
@@ -107,9 +110,7 @@ public class BunnyHead extends AbstractGameObject {
                     velocity.y = terminalVelocity.y;
                 }
         }
-        if (jumpState != JUMP_STATE.GROUNDED) {
-            super.updateMotionY(deltaTime);
-        }
+        super.updateMotionY(deltaTime);
     }
 
     @Override
